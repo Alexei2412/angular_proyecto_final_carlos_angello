@@ -1,0 +1,5 @@
+[
+  { "id": "PRE", "nombre": "Presencial" },
+  { "id": "VIR", "nombre": "Virtual" },
+  { "id": "HIB", "nombre": "Híbrida" }
+]

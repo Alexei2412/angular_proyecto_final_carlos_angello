@@ -1,0 +1,6 @@
+[
+  { "id": "MAT", "nombre": "Matutina" },
+  { "id": "VES", "nombre": "Vespertina" },
+  { "id": "NOC", "nombre": "Nocturna" },
+  { "id": "FDS", "nombre": "Fin de semana" }
+]
