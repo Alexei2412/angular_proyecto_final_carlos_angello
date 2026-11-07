@@ -42,3 +42,4 @@ export class CatalogService {
     return cursoIds.reduce((total, id) => total + (this.getCourse(id)?.creditos ?? 0), 0);
   }
 }
+
