@@ -1,0 +1,18 @@
+[
+  { "id": "WEB101", "codigo": "WEB101", "nombre": "Programación Web", "creditos": 5, "carreraId": "ISC", "semestre": 6 },
+  { "id": "BD101", "codigo": "BD101", "nombre": "Bases de Datos I", "creditos": 5, "carreraId": "ISC", "semestre": 4 },
+  { "id": "BD201", "codigo": "BD201", "nombre": "Bases de Datos II", "creditos": 5, "carreraId": "ISC", "semestre": 5 },
+  { "id": "RED101", "codigo": "RED101", "nombre": "Redes de Computadoras I", "creditos": 4, "carreraId": "ISC", "semestre": 5 },
+  { "id": "SO101", "codigo": "SO101", "nombre": "Sistemas Operativos", "creditos": 4, "carreraId": "ISC", "semestre": 4 },
+  { "id": "ISW201", "codigo": "ISW201", "nombre": "Ingeniería de Software II", "creditos": 5, "carreraId": "ISC", "semestre": 6 },
+  { "id": "AUT101", "codigo": "AUT101", "nombre": "Autómatas y Lenguajes Formales", "creditos": 4, "carreraId": "ISC", "semestre": 5 },
+  { "id": "EST101", "codigo": "EST101", "nombre": "Estadística I", "creditos": 4, "carreraId": "ISC", "semestre": 3 },
+  { "id": "IND101", "codigo": "IND101", "nombre": "Investigación de Operaciones", "creditos": 5, "carreraId": "IND", "semestre": 5 },
+  { "id": "IND102", "codigo": "IND102", "nombre": "Control de Calidad", "creditos": 4, "carreraId": "IND", "semestre": 6 },
+  { "id": "IND103", "codigo": "IND103", "nombre": "Procesos de Manufactura", "creditos": 4, "carreraId": "IND", "semestre": 4 },
+  { "id": "IND104", "codigo": "IND104", "nombre": "Seguridad Industrial", "creditos": 3, "carreraId": "IND", "semestre": 3 },
+  { "id": "ADM101", "codigo": "ADM101", "nombre": "Contabilidad General", "creditos": 4, "carreraId": "ADM", "semestre": 1 },
+  { "id": "ADM102", "codigo": "ADM102", "nombre": "Mercadotecnia", "creditos": 4, "carreraId": "ADM", "semestre": 3 },
+  { "id": "ADM103", "codigo": "ADM103", "nombre": "Finanzas Corporativas", "creditos": 5, "carreraId": "ADM", "semestre": 5 },
+  { "id": "ADM104", "codigo": "ADM104", "nombre": "Recursos Humanos", "creditos": 3, "carreraId": "ADM", "semestre": 4 }
+]

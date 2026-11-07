@@ -1,0 +1,5 @@
+[
+  { "id": "ISC", "nombre": "Ingeniería en Sistemas" },
+  { "id": "IND", "nombre": "Ingeniería Industrial" },
+  { "id": "ADM", "nombre": "Administración de Empresas" }
+]
