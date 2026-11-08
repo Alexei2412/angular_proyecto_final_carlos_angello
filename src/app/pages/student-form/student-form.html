@@ -1,0 +1,123 @@
+<div class="page-header">
+  <h1>{{ isEdit() ? 'Editar estudiante ' + id() : 'Nuevo estudiante' }}</h1>
+  <a mat-button routerLink="/estudiantes"><mat-icon>arrow_back</mat-icon> Volver</a>
+</div>
+
+<form [formGroup]="studentForm" (ngSubmit)="save()" novalidate>
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Datos personales</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <section class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Código estudiantil</mat-label>
+          <input matInput formControlName="id" placeholder="EST-001" (input)="upperCaseId()" />
+          <mat-hint>Formato EST-001</mat-hint>
+          <mat-error>{{ errorOf(f.id, 'Use el formato EST- seguido de 3 a 6 dígitos') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput formControlName="nombres" placeholder="María José" />
+          <mat-error>{{ errorOf(f.nombres, 'Solo se permiten letras y espacios') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input matInput formControlName="apellidos" placeholder="López García" />
+          <mat-error>{{ errorOf(f.apellidos, 'Solo se permiten letras y espacios') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>DPI / CUI</mat-label>
+          <input matInput formControlName="dpi" placeholder="1234567890101" maxlength="13" />
+          <mat-hint align="end">{{ f.dpi.value.length }}/13</mat-hint>
+          <mat-error>{{ errorOf(f.dpi, 'El DPI debe tener exactamente 13 dígitos') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput formControlName="fechaNacimiento" type="date" />
+          <mat-error>{{ errorOf(f.fechaNacimiento) }}</mat-error>
+        </mat-form-field>
+
+        <div class="radio-field">
+          <label class="radio-label">Género</label>
+          <mat-radio-group formControlName="genero" class="radio-group">
+            @for (genero of catalogs.generos.value(); track genero.id) {
+              <mat-radio-button [value]="genero.id">{{ genero.nombre }}</mat-radio-button>
+            }
+          </mat-radio-group>
+          @if (f.genero.touched && f.genero.invalid) {
+            <p class="form-error">Seleccione una opción</p>
+          }
+        </div>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Contacto y residencia</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <section class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="correo" type="email" placeholder="maria@umes.edu.gt" />
+          <mat-error>{{
+            errorOf(f.correo, 'Ingrese un correo válido, ej. nombre@dominio.com')
+          }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección de residencia</mat-label>
+          <textarea
+            matInput
+            formControlName="direccion"
+            rows="2"
+            placeholder="5a. avenida 10-20 zona 1, Quetzaltenango"
+          ></textarea>
+          <mat-error>{{ errorOf(f.direccion) }}</mat-error>
+        </mat-form-field>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Datos académicos</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <section class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Carrera</mat-label>
+          <mat-select formControlName="carreraId">
+            @for (carrera of catalogs.carreras.value(); track carrera.id) {
+              <mat-option [value]="carrera.id">{{ carrera.nombre }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ errorOf(f.carreraId) }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Jornada</mat-label>
+          <mat-select formControlName="jornadaId">
+            @for (jornada of catalogs.jornadas.value(); track jornada.id) {
+              <mat-option [value]="jornada.id">{{ jornada.nombre }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ errorOf(f.jornadaId) }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Semestre que cursa</mat-label>
+          <input matInput formControlName="semestre" type="number" min="1" max="10" />
+          <mat-error>{{ errorOf(f.semestre) }}</mat-error>
+        </mat-form-field>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="form-actions">
+    <a mat-button routerLink="/estudiantes">Cancelar</a>
+    <button mat-flat-button type="submit">
+      <mat-icon>save</mat-icon> {{ isEdit() ? 'Guardar cambios' : 'Registrar' }}
+    </button>
+  </div>
+</form>
