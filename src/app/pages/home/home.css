@@ -1,0 +1,41 @@
+.intro {
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 24px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  text-align: center;
+}
+
+.stat-icon {
+  color: var(--mat-sys-primary);
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.stat-value {
+  font: var(--mat-sys-display-small);
+}
+
+.stat-label {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.shortcuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.shortcuts h2 {
+  font: var(--mat-sys-title-large);
+  margin-top: 0;
+}

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Home } from './pages/home/home';
 import { StudentList } from './pages/student-list/student-list';
 import { StudentForm } from './pages/student-form/student-form';
 import { StudentDetail } from './pages/student-detail/student-detail';
@@ -7,6 +8,8 @@ import { EnrollmentForm } from './pages/enrollment-form/enrollment-form';
 import { EnrollmentDetail } from './pages/enrollment-detail/enrollment-detail';
 
 export const routes: Routes = [
+  { path: '', component: Home, title: 'Inicio' },
+
   { path: 'estudiantes', component: StudentList, title: 'Estudiantes' },
   { path: 'estudiantes/nuevo', component: StudentForm, title: 'Nuevo estudiante' },
   { path: 'estudiantes/:id', component: StudentDetail, title: 'Detalle de estudiante' },
@@ -16,4 +19,6 @@ export const routes: Routes = [
   { path: 'inscripciones/nueva', component: EnrollmentForm, title: 'Nueva inscripción' },
   { path: 'inscripciones/:id', component: EnrollmentDetail, title: 'Detalle de inscripción' },
   { path: 'inscripciones/:id/editar', component: EnrollmentForm, title: 'Editar inscripción' },
+
+  { path: '**', redirectTo: '' },
 ];
