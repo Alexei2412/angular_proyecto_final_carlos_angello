@@ -1,1 +1,125 @@
-<p>student-detail works!</p>
+@if (student(); as s) {
+  <div class="page-header">
+    <h1>{{ s.nombres }} {{ s.apellidos }}</h1>
+    <div class="header-actions">
+      <a mat-button routerLink="/estudiantes"><mat-icon>arrow_back</mat-icon> Volver</a>
+      <a mat-stroked-button [routerLink]="['/estudiantes', s.id, 'editar']"
+        ><mat-icon>edit</mat-icon> Editar</a
+      >
+      <a mat-flat-button routerLink="/inscripciones/nueva" [queryParams]="{ estudiante: s.id }">
+        <mat-icon>add</mat-icon> Inscribir
+      </a>
+    </div>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Información general</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <dl class="detail-list">
+        <div>
+          <dt>Código</dt>
+          <dd>{{ s.id }}</dd>
+        </div>
+        <div>
+          <dt>DPI</dt>
+          <dd>{{ s.dpi }}</dd>
+        </div>
+        <div>
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ s.fechaNacimiento | date: 'dd/MM/yyyy' }}</dd>
+        </div>
+        <div>
+          <dt>Género</dt>
+          <dd>{{ catalogs.getName(catalogs.generos.value(), s.genero) }}</dd>
+        </div>
+        <div>
+          <dt>Correo</dt>
+          <dd>{{ s.correo }}</dd>
+        </div>
+        <div>
+          <dt>Dirección</dt>
+          <dd>{{ s.direccion }}</dd>
+        </div>
+        <div>
+          <dt>Carrera</dt>
+          <dd>{{ catalogs.getName(catalogs.carreras.value(), s.carreraId) }}</dd>
+        </div>
+        <div>
+          <dt>Jornada</dt>
+          <dd>{{ catalogs.getName(catalogs.jornadas.value(), s.jornadaId) }}</dd>
+        </div>
+        <div>
+          <dt>Semestre</dt>
+          <dd>{{ s.semestre }}</dd>
+        </div>
+        <div>
+          <dt>Registrado</dt>
+          <dd>{{ s.fechaRegistro | date: 'dd/MM/yyyy HH:mm' }}</dd>
+        </div>
+      </dl>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Números de contacto</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        @for (c of s.contactos; track $index) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>{{ c.activo ? 'phone' : 'phone_disabled' }}</mat-icon>
+            <span matListItemTitle>{{ c.numero }}</span>
+            <span matListItemLine>
+              {{ catalogs.getName(catalogs.tiposContacto.value(), c.tipo) }} ·
+              {{ c.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </mat-list-item>
+        }
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header
+      ><mat-card-title>Inscripciones ({{ enrollments().length }})</mat-card-title></mat-card-header
+    >
+    <mat-card-content>
+      @if (enrollments().length === 0) {
+        <p class="empty-state">Este estudiante aún no tiene inscripciones.</p>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="enrollments()">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Inscripción</th>
+              <td mat-cell *matCellDef="let e">
+                <a [routerLink]="['/inscripciones', e.id]">{{ e.id }}</a>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="periodo">
+              <th mat-header-cell *matHeaderCellDef>Período</th>
+              <td mat-cell *matCellDef="let e">{{ e.periodoId }}</td>
+            </ng-container>
+            <ng-container matColumnDef="cursos">
+              <th mat-header-cell *matHeaderCellDef>Cursos</th>
+              <td mat-cell *matCellDef="let e">{{ e.cursoIds.join(', ') }}</td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let e">
+                <span class="status status-{{ e.estado }}">{{
+                  catalogs.getName(catalogs.estados.value(), e.estado)
+                }}</span>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="enrollmentColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: enrollmentColumns"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <div class="empty-state">
+    <p>No existe el estudiante "{{ id() }}".</p>
+    <a mat-button routerLink="/estudiantes">Ir al listado</a>
+  </div>
+}
