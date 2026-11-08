@@ -1,0 +1,102 @@
+<div class="page-header">
+  <h1>Estudiantes</h1>
+  <a mat-flat-button routerLink="/estudiantes/nuevo">
+    <mat-icon>person_add</mat-icon> Nuevo estudiante
+  </a>
+</div>
+
+<mat-card appearance="outlined">
+  <mat-card-content>
+    <form [formGroup]="filterForm" class="filters">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Buscar</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput formControlName="texto" placeholder="Código, nombre o correo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Carrera</mat-label>
+        <mat-select formControlName="carreraId">
+          <mat-option value="">Todas</mat-option>
+          @for (carrera of catalogs.carreras.value(); track carrera.id) {
+            <mat-option [value]="carrera.id">{{ carrera.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Género</mat-label>
+        <mat-select formControlName="genero">
+          <mat-option value="">Todos</mat-option>
+          @for (genero of catalogs.generos.value(); track genero.id) {
+            <mat-option [value]="genero.id">{{ genero.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-button type="button" (click)="clearFilters()" class="clear-btn">
+        <mat-icon>filter_alt_off</mat-icon> Limpiar
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<p class="results">
+  {{ filteredStudents().length }} de {{ studentService.students().length }} estudiantes
+</p>
+
+@if (filteredStudents().length === 0) {
+  <div class="empty-state">
+    <mat-icon>person_search</mat-icon>
+    <p>No hay estudiantes que coincidan. Registre uno nuevo o cambie los filtros.</p>
+  </div>
+} @else {
+  <div class="table-container mat-elevation-z1">
+    <table mat-table [dataSource]="filteredStudents()">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let s">{{ s.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let s">{{ s.nombres }} {{ s.apellidos }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>Correo</th>
+        <td mat-cell *matCellDef="let s">{{ s.correo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="carrera">
+        <th mat-header-cell *matHeaderCellDef>Carrera</th>
+        <td mat-cell *matCellDef="let s">
+          {{ catalogs.getName(catalogs.carreras.value(), s.carreraId) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="contacto">
+        <th mat-header-cell *matHeaderCellDef>Contacto</th>
+        <td mat-cell *matCellDef="let s">{{ mainContact(s) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let s" class="actions">
+          <a mat-icon-button [routerLink]="['/estudiantes', s.id]" matTooltip="Ver detalle">
+            <mat-icon>visibility</mat-icon>
+          </a>
+          <a mat-icon-button [routerLink]="['/estudiantes', s.id, 'editar']" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button mat-icon-button (click)="confirmDelete(s)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+}
