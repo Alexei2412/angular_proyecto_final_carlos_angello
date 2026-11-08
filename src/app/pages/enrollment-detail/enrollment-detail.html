@@ -1,0 +1,92 @@
+@if (enrollment(); as e) {
+  <div class="page-header">
+    <h1>Inscripción {{ e.id }}</h1>
+    <div class="header-actions">
+      <a mat-button routerLink="/inscripciones"><mat-icon>arrow_back</mat-icon> Volver</a>
+      @if (e.estado !== CANCELADA) {
+        <a mat-stroked-button [routerLink]="['/inscripciones', e.id, 'editar']"
+          ><mat-icon>edit</mat-icon> Editar</a
+        >
+      }
+    </div>
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <dl class="detail-list">
+        <div>
+          <dt>Estudiante</dt>
+          <dd>
+            <a [routerLink]="['/estudiantes', e.estudianteId]">{{ e.estudianteId }}</a> ·
+            {{ studentService.fullName(e.estudianteId) }}
+          </dd>
+        </div>
+        <div>
+          <dt>Período</dt>
+          <dd>
+            {{ catalogs.getName(catalogs.periodos.value(), e.periodoId) }} ({{ e.periodoId }})
+          </dd>
+        </div>
+        <div>
+          <dt>Modalidad</dt>
+          <dd>{{ catalogs.getName(catalogs.modalidades.value(), e.modalidadId) }}</dd>
+        </div>
+        <div>
+          <dt>Estado</dt>
+          <dd>
+            <span class="status status-{{ e.estado }}">{{
+              catalogs.getName(catalogs.estados.value(), e.estado)
+            }}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Fecha de inscripción</dt>
+          <dd>{{ e.fechaInscripcion | date: 'dd/MM/yyyy HH:mm' }}</dd>
+        </div>
+        @if (e.observaciones) {
+          <div>
+            <dt>Observaciones</dt>
+            <dd>{{ e.observaciones }}</dd>
+          </div>
+        }
+      </dl>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header
+      ><mat-card-title
+        >Cursos ({{ courses().length }}) · {{ totalCredits() }} créditos</mat-card-title
+      ></mat-card-header
+    >
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="courses()">
+          <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef>Código</th>
+            <td mat-cell *matCellDef="let c">{{ c.codigo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Curso</th>
+            <td mat-cell *matCellDef="let c">{{ c.nombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="semestre">
+            <th mat-header-cell *matHeaderCellDef>Semestre</th>
+            <td mat-cell *matCellDef="let c">{{ c.semestre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="creditos">
+            <th mat-header-cell *matHeaderCellDef>Créditos</th>
+            <td mat-cell *matCellDef="let c">{{ c.creditos }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="courseColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: courseColumns"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <div class="empty-state">
+    <p>No existe la inscripción "{{ id() }}".</p>
+    <a mat-button routerLink="/inscripciones">Ir al listado</a>
+  </div>
+}

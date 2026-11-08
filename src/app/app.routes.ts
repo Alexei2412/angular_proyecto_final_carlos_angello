@@ -4,6 +4,7 @@ import { StudentForm } from './pages/student-form/student-form';
 import { StudentDetail } from './pages/student-detail/student-detail';
 import { EnrollmentList } from './pages/enrollment-list/enrollment-list';
 import { EnrollmentForm } from './pages/enrollment-form/enrollment-form';
+import { EnrollmentDetail } from './pages/enrollment-detail/enrollment-detail';
 
 export const routes: Routes = [
   { path: 'estudiantes', component: StudentList, title: 'Estudiantes' },
@@ -13,5 +14,6 @@ export const routes: Routes = [
 
   { path: 'inscripciones', component: EnrollmentList, title: 'Inscripciones' },
   { path: 'inscripciones/nueva', component: EnrollmentForm, title: 'Nueva inscripción' },
+  { path: 'inscripciones/:id', component: EnrollmentDetail, title: 'Detalle de inscripción' },
   { path: 'inscripciones/:id/editar', component: EnrollmentForm, title: 'Editar inscripción' },
 ];
