@@ -1,0 +1,127 @@
+<div class="page-header">
+  <h1>{{ isEdit() ? 'Editar inscripción ' + id() : 'Nueva inscripción' }}</h1>
+  <a mat-button routerLink="/inscripciones"><mat-icon>arrow_back</mat-icon> Volver</a>
+</div>
+
+@if (studentService.students().length === 0) {
+  <div class="empty-state">
+    <p>Primero debe registrar al menos un estudiante.</p>
+    <a mat-flat-button routerLink="/estudiantes/nuevo">Registrar estudiante</a>
+  </div>
+} @else {
+<form [formGroup]="enrollmentForm" (ngSubmit)="save()" novalidate>
+
+  <mat-card appearance="outlined">
+    <mat-card-header><mat-card-title>Datos de la inscripción</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <section class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Estudiante</mat-label>
+          <mat-select formControlName="estudianteId" (selectionChange)="onStudentChange()">
+            @for (s of studentService.students(); track s.id) {
+              <mat-option [value]="s.id">{{ s.id }} - {{ s.nombres }} {{ s.apellidos }}</mat-option>
+            }
+          </mat-select>
+          @if (selectedStudent(); as st) {
+            <mat-hint>{{ catalogs.getName(catalogs.carreras.value(), st.carreraId) }} · semestre {{ st.semestre }}</mat-hint>
+          }
+          <mat-error>{{ errorOf(f.estudianteId) }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Período académico</mat-label>
+          <mat-select formControlName="periodoId">
+            @for (p of availablePeriods(); track p.id) {
+              <mat-option [value]="p.id">{{ p.id }} · {{ p.nombre }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ errorOf(f.periodoId) }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            @for (e of availableStatuses(); track e.id) {
+              <mat-option [value]="e.id">{{ e.nombre }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ errorOf(f.estado) }}</mat-error>
+        </mat-form-field>
+      </section>
+
+      <label class="radio-label">Modalidad</label>
+      <mat-radio-group formControlName="modalidadId" class="radio-group">
+        @for (m of catalogs.modalidades.value(); track m.id) {
+          <mat-radio-button [value]="m.id">{{ m.nombre }}</mat-radio-button>
+        }
+      </mat-radio-group>
+      @if (f.modalidadId.touched && f.modalidadId.invalid) {
+        <p class="form-error">Seleccione una modalidad</p>
+      }
+@if (enrollmentForm.hasError('duplicatePeriod')) {
+        <p class="form-error">
+          Este estudiante ya tiene una inscripción vigente en el período {{ f.periodoId.value }}.
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Cursos</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="rules">
+        Máximo {{ maxCourses }} cursos y {{ maxCredits }} créditos.
+        Seleccionados: <strong>{{ f.cursoIds.value.length }}</strong> cursos ·
+        <strong [class.over]="totalCredits() > maxCredits">{{ totalCredits() }}</strong> créditos
+      </p>
+
+      @if (!selectedStudent()) {
+        <p class="empty-state">Seleccione un estudiante para ver los cursos de su carrera.</p>
+      } @else {
+        <div class="course-grid">
+          @for (curso of availableCourses(); track curso.id) {
+            <mat-checkbox [checked]="isSelected(curso.id)"
+                          [disabled]="!isSelected(curso.id) && f.cursoIds.value.length >= maxCourses"
+                          (change)="toggleCourse(curso.id, $event.checked)">
+              <span class="course-name">{{ curso.codigo }} · {{ curso.nombre }}</span>
+              <span class="course-info">{{ curso.creditos }} créditos · semestre {{ curso.semestre }}</span>
+            </mat-checkbox>
+          }
+        </div>
+      }
+
+      @if (f.cursoIds.touched && f.cursoIds.hasError('minItems')) {
+        <p class="form-error">Seleccione al menos un curso</p>
+      }
+      @if (f.cursoIds.hasError('maxItems')) {
+        <p class="form-error">Solo puede seleccionar {{ maxCourses }} cursos</p>
+      }
+      @if (enrollmentForm.hasError('maxCredits')) {
+        <p class="form-error">
+          Excede el límite de créditos ({{ totalCredits() }} de {{ maxCredits }} permitidos)
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Observaciones (opcional)</mat-label>
+        <textarea matInput formControlName="observaciones" rows="2" maxlength="250"></textarea>
+        <mat-hint align="end">{{ f.observaciones.value.length }}/250</mat-hint>
+        <mat-error>{{ errorOf(f.observaciones) }}</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="form-actions">
+    <a mat-button routerLink="/inscripciones">Cancelar</a>
+    <button mat-flat-button type="submit">
+      <mat-icon>save</mat-icon> {{ isEdit() ? 'Guardar cambios' : 'Registrar inscripción' }}
+    </button>
+  </div>
+</form>
+}
