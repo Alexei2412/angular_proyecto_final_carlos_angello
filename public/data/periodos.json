@@ -1,5 +1,5 @@
 [
-   { "id": "2025-2", "nombre": "Segundo semestre 2025", "activo": false },
+  { "id": "2025-2", "nombre": "Segundo semestre 2025", "activo": false },
   { "id": "2026-1", "nombre": "Primer semestre 2026", "activo": true },
   { "id": "2026-2", "nombre": "Segundo semestre 2026", "activo": true },
   { "id": "2027-1", "nombre": "Primer semestre 2027", "activo": true }

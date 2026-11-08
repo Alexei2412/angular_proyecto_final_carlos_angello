@@ -4,18 +4,20 @@ import { Router, RouterLink } from '@angular/router';
 import { MatFormField, MatError, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { MatButton } from '@angular/material/button';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StudentService } from '../../services/student-service';
 import { CatalogService } from '../../services/catalog-service';
-import { Student } from '../../interfaces/student.model';
+import { ContactNumber, Student } from '../../interfaces/student.model';
 import {
   CustomValidators,
   DPI_PATTERN,
   EMAIL_PATTERN,
   NAME_PATTERN,
+  PHONE_PATTERN,
   STUDENT_ID_PATTERN,
 } from '../../validators/custom-validators';
 import { getErrorMessage } from '../../utils/form-errors';
@@ -34,7 +36,9 @@ import { getErrorMessage } from '../../utils/form-errors';
     MatOption,
     MatRadioGroup,
     MatRadioButton,
+    MatSlideToggle,
     MatButton,
+    MatIconButton,
     MatIcon,
     MatCard,
     MatCardHeader,
@@ -104,10 +108,23 @@ export class StudentForm implements OnInit {
     carreraId: ['', Validators.required],
     jornadaId: ['', Validators.required],
     semestre: [1, [Validators.required, Validators.min(1), Validators.max(10)]],
+    contactos: this.fb.array(
+      [this.createContact()],
+      [
+        CustomValidators.minItems(1),
+        CustomValidators.maxItems(5),
+        CustomValidators.atLeastOneActive,
+        CustomValidators.noDuplicateNumbers,
+      ],
+    ),
   });
 
   get f() {
     return this.studentForm.controls;
+  }
+
+  get contactos() {
+    return this.studentForm.controls.contactos;
   }
 
   ngOnInit(): void {
@@ -121,8 +138,27 @@ export class StudentForm implements OnInit {
       this.router.navigate(['/estudiantes']);
       return;
     }
+    this.contactos.clear();
+    student.contactos.forEach((c) => this.contactos.push(this.createContact(c)));
     this.studentForm.patchValue(student);
     this.f.id.disable();
+  }
+
+  createContact(contact?: ContactNumber) {
+    return this.fb.group({
+      numero: [contact?.numero ?? '', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      tipo: [contact?.tipo ?? 'MOVIL', Validators.required],
+      activo: [contact?.activo ?? true],
+    });
+  }
+
+  addContact(): void {
+    this.contactos.push(this.createContact());
+  }
+
+  removeContact(index: number): void {
+    this.contactos.removeAt(index);
+    this.contactos.markAsTouched();
   }
 
   upperCaseId(): void {
@@ -149,7 +185,7 @@ export class StudentForm implements OnInit {
       apellidos: value.apellidos.trim(),
       correo: value.correo.trim().toLowerCase(),
       direccion: value.direccion.trim(),
-      contactos: [],
+      contactos: value.contactos.map((c) => ({ ...c, numero: c.numero.trim() })),
       fechaRegistro: existing?.fechaRegistro ?? new Date().toISOString(),
     };
 

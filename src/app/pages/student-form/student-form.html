@@ -78,6 +78,67 @@
           <mat-error>{{ errorOf(f.direccion) }}</mat-error>
         </mat-form-field>
       </section>
+      <h3 class="subtitle">Números de contacto</h3>
+      <div formArrayName="contactos">
+        @for (contacto of contactos.controls; track contacto; let i = $index) {
+          <div class="contact-row" [formGroupName]="i">
+            <mat-form-field appearance="outline">
+              <mat-label>Número {{ i + 1 }}</mat-label>
+              <input matInput formControlName="numero" placeholder="5555-1234" maxlength="9" />
+              <mat-error>{{
+                errorOf(contacto.controls.numero, 'Debe tener 8 dígitos, ej. 5555-1234')
+              }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="tipo">
+                @for (tipo of catalogs.tiposContacto.value(); track tipo.id) {
+                  <mat-option [value]="tipo.id">{{ tipo.nombre }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-slide-toggle formControlName="activo">
+              {{ contacto.controls.activo.value ? 'Activo' : 'Inactivo' }}
+            </mat-slide-toggle>
+
+            <button
+              mat-icon-button
+              type="button"
+              (click)="removeContact(i)"
+              [disabled]="contactos.length === 1"
+              aria-label="Quitar número"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+
+      @if (contactos.touched || contactos.dirty) {
+        @if (contactos.hasError('minItems')) {
+          <p class="form-error">Agregue al menos un número de contacto</p>
+        }
+        @if (contactos.hasError('maxItems')) {
+          <p class="form-error">Máximo 5 números de contacto</p>
+        }
+        @if (contactos.hasError('noActiveContact')) {
+          <p class="form-error">Al menos un número debe estar activo</p>
+        }
+        @if (contactos.hasError('duplicateNumber')) {
+          <p class="form-error">No repita el mismo número</p>
+        }
+      }
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="addContact()"
+        [disabled]="contactos.length >= 5"
+      >
+        <mat-icon>add</mat-icon> Agregar número
+      </button>
     </mat-card-content>
   </mat-card>
 

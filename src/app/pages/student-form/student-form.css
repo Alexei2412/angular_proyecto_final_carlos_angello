@@ -3,3 +3,28 @@
   flex-direction: column;
   margin-bottom: 16px;
 }
+
+.subtitle {
+  font: var(--mat-sys-title-small);
+  margin: 8px 0 12px;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr auto auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.contact-row mat-slide-toggle,
+.contact-row button {
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .contact-row {
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    margin-bottom: 12px;
+  }
+}
