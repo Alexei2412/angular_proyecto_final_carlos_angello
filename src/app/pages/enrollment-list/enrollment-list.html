@@ -1,0 +1,116 @@
+<div class="page-header">
+  <h1>Inscripciones</h1>
+  <a mat-flat-button routerLink="/inscripciones/nueva">
+    <mat-icon>add</mat-icon> Nueva inscripción
+  </a>
+</div>
+<mat-card appearance="outlined">
+  <mat-card-content>
+    <form [formGroup]="filterForm" class="filters">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Estudiante</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput formControlName="estudiante" placeholder="Código o nombre" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Período</mat-label>
+        <mat-select formControlName="periodoId">
+          <mat-option value="">Todos</mat-option>
+          @for (p of catalogs.periodos.value(); track p.id) {
+            <mat-option [value]="p.id">{{ p.id }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="estado">
+          <mat-option value="">Todos</mat-option>
+          @for (e of catalogs.estados.value(); track e.id) {
+            <mat-option [value]="e.id">{{ e.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-button type="button" (click)="clearFilters()" class="clear-btn">
+        <mat-icon>filter_alt_off</mat-icon> Limpiar
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
+<p class="results">
+  {{ filteredEnrollments().length }} de {{ enrollmentService.enrollments().length }} inscripciones
+</p>
+
+@if (filteredEnrollments().length === 0) {
+  <div class="empty-state">
+    <p>No hay inscripciones que coincidan con la búsqueda.</p>
+  </div>
+} @else {
+  <div class="table-container mat-elevation-z1">
+    <table mat-table [dataSource]="filteredEnrollments()">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let e">{{ e.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estudiante">
+        <th mat-header-cell *matHeaderCellDef>Estudiante</th>
+        <td mat-cell *matCellDef="let e">
+          <a [routerLink]="['/estudiantes', e.estudianteId]">{{ e.estudianteId }}</a>
+          · {{ studentService.fullName(e.estudianteId) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="periodo">
+        <th mat-header-cell *matHeaderCellDef>Período</th>
+        <td mat-cell *matCellDef="let e">{{ e.periodoId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cursos">
+        <th mat-header-cell *matHeaderCellDef>Cursos</th>
+        <td mat-cell *matCellDef="let e">{{ e.cursoIds.join(', ') }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="creditos">
+        <th mat-header-cell *matHeaderCellDef>Créditos</th>
+        <td mat-cell *matCellDef="let e">{{ catalogs.totalCredits(e.cursoIds) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let e">
+          <span class="status status-{{ e.estado }}">{{
+            catalogs.getName(catalogs.estados.value(), e.estado)
+          }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let e" class="actions">
+          <a mat-icon-button [routerLink]="['/inscripciones', e.id]" matTooltip="Ver detalle">
+            <mat-icon>visibility</mat-icon>
+          </a>
+          <a
+            mat-icon-button
+            [routerLink]="['/inscripciones', e.id, 'editar']"
+            matTooltip="Editar"
+            [disabled]="e.estado === CANCELADA"
+          >
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button
+            mat-icon-button
+            (click)="confirmCancel(e)"
+            matTooltip="Cancelar inscripción"
+            [disabled]="e.estado === CANCELADA"
+          >
+            <mat-icon>block</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+}
