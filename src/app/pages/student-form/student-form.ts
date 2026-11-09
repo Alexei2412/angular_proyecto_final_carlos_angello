@@ -134,7 +134,7 @@ export class StudentForm implements OnInit {
     }
     const student = this.studentService.getById(id);
     if (!student) {
-      this.snackBar.open(`No existe el estudiante ${id}`, 'Cerrar', { duration: 4000 });
+      this.snackBar.open(`No se encontró el expediente del estudiante ${id}`, 'Cerrar', { duration: 4000 });
       this.router.navigate(['/estudiantes']);
       return;
     }
@@ -171,7 +171,7 @@ export class StudentForm implements OnInit {
   save(): void {
     if (this.studentForm.invalid) {
       this.studentForm.markAllAsTouched();
-      this.snackBar.open('Revise los campos marcados en rojo', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('Complete o corrija los campos pendientes antes de guardar', 'Cerrar', { duration: 3000 });
       return;
     }
 
@@ -192,10 +192,10 @@ export class StudentForm implements OnInit {
     try {
       if (this.isEdit()) {
         this.studentService.update(student);
-        this.snackBar.open('Estudiante actualizado', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Datos del estudiante actualizados correctamente', 'Cerrar', { duration: 3000 });
       } else {
         this.studentService.add(student);
-        this.snackBar.open('Estudiante registrado', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Estudiante registrado correctamente', 'Cerrar', { duration: 3000 });
       }
       this.router.navigate(['/estudiantes', student.id]);
     } catch (error) {

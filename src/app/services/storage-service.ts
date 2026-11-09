@@ -13,7 +13,7 @@ export class StorageService {
     }
   }
 
-   write<T>(key: string, value: T): void {
+  write<T>(key: string, value: T): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 }

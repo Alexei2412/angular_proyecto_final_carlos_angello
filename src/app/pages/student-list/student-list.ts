@@ -86,7 +86,7 @@ export class StudentList {
       title: 'Eliminar estudiante',
       message:
         `¿Desea eliminar a ${student.nombres} ${student.apellidos} (${student.id})?` +
-        (total > 0 ? `\n\nTambién se eliminarán sus ${total} inscripción(es).` : '') +
+        (total > 0 ? `\n\nTambién se eliminarán sus ${total} inscripciones asociadas.` : '') +
         '\n\nEsta acción no se puede deshacer.',
       confirmText: 'Eliminar',
       danger: true,
@@ -99,7 +99,7 @@ export class StudentList {
         if (confirmed) {
           this.enrollmentService.deleteByStudent(student.id);
           this.studentService.delete(student.id);
-          this.snackBar.open('Estudiante eliminado', 'Cerrar', { duration: 3000 });
+          this.snackBar.open('Se eliminó el registro del estudiante', 'Cerrar', { duration: 3000 });
         }
       });
   }

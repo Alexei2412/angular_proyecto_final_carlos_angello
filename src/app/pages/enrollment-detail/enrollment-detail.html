@@ -86,7 +86,7 @@
   </mat-card>
 } @else {
   <div class="empty-state">
-    <p>No existe la inscripción "{{ id() }}".</p>
-    <a mat-button routerLink="/inscripciones">Ir al listado</a>
+    <p>No se encontró ninguna inscripción con el código {{ id() }}.</p>
+    <a mat-button routerLink="/inscripciones">Volver al listado</a>
   </div>
 }

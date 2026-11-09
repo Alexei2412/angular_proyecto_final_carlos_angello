@@ -87,7 +87,7 @@ export class EnrollmentList {
       message:
         `¿Desea cancelar la inscripción ${enrollment.id} de ` +
         `${this.studentService.fullName(enrollment.estudianteId)} (${enrollment.periodoId})?`,
-      confirmText: 'Sí, cancelar',
+      confirmText: 'Cancelar inscripción',
       danger: true,
     };
 
@@ -97,7 +97,7 @@ export class EnrollmentList {
       .subscribe((confirmed) => {
         if (confirmed) {
           this.enrollmentService.cancel(enrollment.id);
-          this.snackBar.open('Inscripción cancelada', 'Cerrar', { duration: 3000 });
+          this.snackBar.open('La inscripción fue cancelada correctamente', 'Cerrar', { duration: 3000 });
         }
       });
   }

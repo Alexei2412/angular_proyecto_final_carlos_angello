@@ -55,20 +55,20 @@ export class BackupService {
     try {
       parsed = JSON.parse(fileText);
     } catch {
-      return { valid: false, errors: ['El archivo no contiene JSON válido (error de sintaxis).'] };
+      return { valid: false, errors: ['El archivo seleccionado no tiene un formato JSON válido.'] };
     }
 
     if (!this.isObject(parsed)) {
-      return { valid: false, errors: ['El archivo debe contener un objeto JSON.'] };
+      return { valid: false, errors: ['La estructura general del archivo de respaldo no es válida.'] };
     }
     if (parsed['version'] !== BACKUP_VERSION) {
       errors.push(`Versión de formato no soportada: se esperaba "${BACKUP_VERSION}".`);
     }
     if (!Array.isArray(parsed['estudiantes'])) {
-      errors.push('Falta la colección "estudiantes" o no es un arreglo.');
+      errors.push('El archivo no incluye una lista válida de "estudiantes".');
     }
     if (!Array.isArray(parsed['inscripciones'])) {
-      errors.push('Falta la colección "inscripciones" o no es un arreglo.');
+      errors.push('El archivo no incluye una lista válida de "inscripciones".');
     }
     if (errors.length > 0) {
       return { valid: false, errors };
@@ -94,7 +94,7 @@ export class BackupService {
       errors.push(...this.validateEnrollment(item, prefix, studentIds));
       if (this.isObject(item) && typeof item['id'] === 'string') {
         if (enrollmentIds.has(item['id'])) {
-          errors.push(`${prefix}: el id ${item['id']} está duplicado.`);
+          errors.push(`${prefix}: el código ${item['id']} está duplicado.`);
         }
         enrollmentIds.add(item['id']);
       }
@@ -114,7 +114,7 @@ export class BackupService {
   private validateStudent(item: unknown, prefix: string): string[] {
     const errors: string[] = [];
     if (!this.isObject(item)) {
-      return [`${prefix}: no es un objeto.`];
+      return [`${prefix}: el formato del registro no es válido.`];
     }
     const s = item as Partial<Record<keyof Student, unknown>>;
     const requiredText: (keyof Student)[] = [
@@ -169,7 +169,7 @@ export class BackupService {
     }
 
     if (!Array.isArray(s.contactos) || s.contactos.length === 0) {
-      errors.push(`${prefix}: "contactos" debe ser un arreglo con al menos un número.`);
+      errors.push(`${prefix}: debe incluir al menos un número en "contactos".`);
     } else {
       s.contactos.forEach((c: unknown, i: number) => {
         if (
@@ -181,7 +181,7 @@ export class BackupService {
           typeof c['activo'] !== 'boolean'
         ) {
           errors.push(
-            `${prefix}: el contacto #${i + 1} debe tener numero (8 dígitos), tipo válido y activo (true/false).`,
+            `${prefix}: el contacto #${i + 1} requiere un número de 8 dígitos, un tipo válido y un estado activo definido.`,
           );
         }
       });
@@ -192,7 +192,7 @@ export class BackupService {
   private validateEnrollment(item: unknown, prefix: string, studentIds: Set<string>): string[] {
     const errors: string[] = [];
     if (!this.isObject(item)) {
-      return [`${prefix}: no es un objeto.`];
+      return [`${prefix}: el formato del registro no es válido.`];
     }
     const e = item as Partial<Record<keyof Enrollment, unknown>>;
 
@@ -216,23 +216,23 @@ export class BackupService {
       typeof e.periodoId === 'string' &&
       !this.inCatalog(this.catalogService.periodos.value(), e.periodoId)
     ) {
-      errors.push(`${prefix}: el período "${e.periodoId}" no existe.`);
+      errors.push(`${prefix}: el período "${e.periodoId}" no existe en el catálogo.`);
     }
     if (
       typeof e.modalidadId === 'string' &&
       !this.inCatalog(this.catalogService.modalidades.value(), e.modalidadId)
     ) {
-      errors.push(`${prefix}: la modalidad "${e.modalidadId}" no existe.`);
+      errors.push(`${prefix}: la modalidad "${e.modalidadId}" no existe en el catálogo.`);
     }
     if (
       typeof e.estado === 'string' &&
       !this.inCatalog(this.catalogService.estados.value(), e.estado)
     ) {
-      errors.push(`${prefix}: el estado "${e.estado}" no existe.`);
+      errors.push(`${prefix}: el estado "${e.estado}" no existe en el catálogo.`);
     }
 
     if (!Array.isArray(e.cursoIds) || e.cursoIds.length === 0) {
-      errors.push(`${prefix}: "cursoIds" debe ser un arreglo con al menos un curso.`);
+      errors.push(`${prefix}: debe incluir al menos un curso en "cursoIds".`);
     } else {
       for (const cursoId of e.cursoIds) {
         if (typeof cursoId !== 'string' || !this.catalogService.getCourse(cursoId)) {

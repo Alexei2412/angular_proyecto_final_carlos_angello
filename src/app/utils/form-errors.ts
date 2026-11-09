@@ -2,7 +2,7 @@ import { AbstractControl } from '@angular/forms';
 
 export function getErrorMessage(
   control: AbstractControl | null,
-  patternMessage = 'Formato inválido',
+  patternMessage = 'El formato ingresado no es válido',
 ): string {
   if (!control || !control.errors) {
     return '';
@@ -13,13 +13,13 @@ export function getErrorMessage(
     return 'Este campo es obligatorio';
   }
   if (errors['whitespace']) {
-    return 'No puede contener únicamente espacios en blanco';
+    return 'Ingrese un texto válido sin usar solo espacios';
   }
   if (errors['minlength']) {
-    return `Debe tener al menos ${errors['minlength'].requiredLength} caracteres`;
+    return `Ingrese al menos ${errors['minlength'].requiredLength} caracteres`;
   }
   if (errors['maxlength']) {
-    return `Debe tener como máximo ${errors['maxlength'].requiredLength} caracteres`;
+    return `No debe exceder los ${errors['maxlength'].requiredLength} caracteres`;
   }
   if (errors['min']) {
     return `El valor mínimo es ${errors['min'].min}`;
@@ -34,7 +34,7 @@ export function getErrorMessage(
     return 'Ya existe un estudiante con este código';
   }
   if (errors['invalidDate']) {
-    return 'Fecha inválida';
+    return 'Ingrese una fecha válida';
   }
   if (errors['futureDate']) {
     return 'La fecha no puede ser futura';
@@ -45,5 +45,5 @@ export function getErrorMessage(
   if (errors['maxAge']) {
     return `La edad máxima es ${errors['maxAge'].required} años`;
   }
-  return 'Valor inválido';
+  return 'El valor ingresado no es válido';
 }

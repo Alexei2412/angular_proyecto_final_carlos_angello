@@ -53,10 +53,10 @@ export class EnrollmentService {
   validateReferences(enrollment: Enrollment): string[] {
     const errors: string[] = [];
     if (!this.studentService.exists(enrollment.estudianteId)) {
-      errors.push(`El estudiante ${enrollment.estudianteId} no existe`);
+      errors.push(`No se encontró el estudiante con código ${enrollment.estudianteId}`);
     }
     if (enrollment.cursoIds.length === 0) {
-      errors.push('Debe seleccionar al menos un curso');
+      errors.push('Seleccione al menos un curso para registrar la inscripción');
     }
     for (const cursoId of enrollment.cursoIds) {
       if (!this.catalogService.getCourse(cursoId)) {

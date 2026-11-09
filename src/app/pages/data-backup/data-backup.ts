@@ -44,7 +44,7 @@ export class DataBackup {
 
   exportData(): void {
     this.backupService.exportData();
-    this.snackBar.open(`Se descargó ${BACKUP_FILE_NAME}`, 'Cerrar', { duration: 3000 });
+    this.snackBar.open(`Copia de seguridad descargada con éxito`, 'Cerrar', { duration: 3000 });
   }
   async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
@@ -70,12 +70,11 @@ export class DataBackup {
     }
 
     const data: ConfirmDialogData = {
-      title: 'Reemplazar datos',
+      title: 'Reemplazar información',
       message:
-        `El archivo contiene ${result.data.estudiantes.length} estudiante(s) y ` +
-        `${result.data.inscripciones.length} inscripción(es).\n\n` +
-        `Se REEMPLAZARÁN los ${this.studentService.students().length} estudiante(s) y ` +
-        `${this.enrollmentService.enrollments().length} inscripción(es) actuales.\n\n¿Desea continuar?`,
+        `El archivo contiene ${result.data.estudiantes.length} estudiantes y ` +
+        `${result.data.inscripciones.length} inscripciones.\n\n` +
+        `Al confirmar, se reemplazarán los estudiantes y las inscripciones registradas actualmente.\n\n¿Desea continuar?`,
       confirmText: 'Importar y reemplazar',
       danger: true,
     };
@@ -87,16 +86,18 @@ export class DataBackup {
           this.backupService.applyImport(result.data);
           this.snackBar.open('Datos importados correctamente', 'Cerrar', { duration: 4000 });
         } else {
-          this.snackBar.open('Importación cancelada. No se modificó ningún dato.', 'Cerrar', {
-            duration: 3000,
-          });
+          this.snackBar.open('Importación cancelada', 'Cerrar', { duration: 3000 });
         }
       });
   }
   private showError(errors: string[]): void {
     this.importErrors.set(errors);
-    this.snackBar.open('El archivo no es válido. No se modificaron los datos.', 'Cerrar', {
-      duration: 5000,
-    });
+    this.snackBar.open(
+      'El archivo contiene inconsistencias. Revise el detalle de errores.',
+      'Cerrar',
+      {
+        duration: 5000,
+      },
+    );
   }
 }

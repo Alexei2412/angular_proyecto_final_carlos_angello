@@ -1,8 +1,8 @@
 <div class="page-header">
-  <h1>Bienvenido</h1>
+  <h1>Panel principal</h1>
 </div>
 <p class="intro">
-  Sistema de gestión de estudiantes e inscripciones de la Universidad Mesoamericana.
+  Resumen general del ciclo académico y accesos rápidos a los módulos del sistema.
 </p>
 <section class="stats">
   @for (stat of stats(); track stat.label) {
@@ -19,28 +19,31 @@
   <mat-card appearance="outlined">
     <mat-card-content>
       <h2>Estudiantes</h2>
-      <p>Registre, consulte, edite o elimine estudiantes y sus números de contacto.</p>
+      <p>Gestione el registro de estudiantes, su información académica y medios de contacto.</p>
     </mat-card-content>
     <mat-card-actions>
       <a mat-button routerLink="/estudiantes">Ver listado</a>
-      <a mat-flat-button routerLink="/estudiantes/nuevo">Nuevo</a>
+      <a mat-flat-button routerLink="/estudiantes/nuevo">Registrar</a>
     </mat-card-actions>
   </mat-card>
   <mat-card appearance="outlined">
     <mat-card-content>
       <h2>Inscripciones</h2>
-      <p>Asigne cursos a un estudiante en un período académico y dé seguimiento a su estado.</p>
+      <p>Asigne cursos por período académico y consulte el estado de cada matrícula.</p>
     </mat-card-content>
     <mat-card-actions>
       <a mat-button routerLink="/inscripciones">Ver listado</a>
-      <a mat-flat-button routerLink="/inscripciones/nueva">Nueva</a>
+      <a mat-flat-button routerLink="/inscripciones/nueva">Nueva inscripción</a>
     </mat-card-actions>
   </mat-card>
 
   <mat-card appearance="outlined">
     <mat-card-content>
       <h2>Respaldo</h2>
-      <p>Exporte todos los registros a un archivo JSON o recupérelos importando un respaldo.</p>
+      <p>
+        Descargue una copia de seguridad de los registros o restaure información desde un respaldo
+        previo.
+      </p>
     </mat-card-content>
     <mat-card-actions>
       <a mat-button routerLink="/respaldo">Importar / Exportar</a>

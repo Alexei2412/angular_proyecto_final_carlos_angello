@@ -5,7 +5,7 @@
 
 @if (studentService.students().length === 0) {
   <div class="empty-state">
-    <p>Primero debe registrar al menos un estudiante.</p>
+    <p>Para crear una inscripción, primero registre un estudiante en el padrón.</p>
     <a mat-flat-button routerLink="/estudiantes/nuevo">Registrar estudiante</a>
   </div>
 } @else {
@@ -96,11 +96,11 @@
         <p class="form-error">Seleccione al menos un curso</p>
       }
       @if (f.cursoIds.hasError('maxItems')) {
-        <p class="form-error">Solo puede seleccionar {{ maxCourses }} cursos</p>
+        <p class="form-error">Puede seleccionar hasta {{ maxCourses }} cursos por inscripción</p>
       }
       @if (enrollmentForm.hasError('maxCredits')) {
         <p class="form-error">
-          Excede el límite de créditos ({{ totalCredits() }} de {{ maxCredits }} permitidos)
+          Se superó el límite de créditos permitidos ({{ totalCredits() }} de {{ maxCredits }})
         </p>
       }
     </mat-card-content>

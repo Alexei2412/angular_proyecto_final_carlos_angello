@@ -26,7 +26,7 @@ export class StudentService {
 
   add(student: Student): void {
     if (this.exists(student.id)) {
-      throw new Error(`Ya existe un estudiante con el código ${student.id}`);
+      throw new Error(`Ya existe un estudiante registrado con el código ${student.id}`);
     }
     this.studentsSignal.update((list) => [...list, student]);
     this.save();

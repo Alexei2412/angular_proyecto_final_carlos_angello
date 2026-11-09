@@ -108,12 +108,12 @@ export class EnrollmentForm implements OnInit{
     if (id) {
       const enrollment = this.enrollmentService.getById(id);
       if (!enrollment) {
-        this.snackBar.open(`No existe la inscripción ${id}`, 'Cerrar', {duration: 4000});
+        this.snackBar.open(`No se encontró la inscripción ${id}`, 'Cerrar', {duration: 4000});
         this.router.navigate(['/inscripciones']);
         return;
       }
       if (enrollment.estado === EnrollmentStatus.CANCELADA) {
-        this.snackBar.open('Una inscripción cancelada no se puede editar', 'Cerrar', {duration: 4000});
+        this.snackBar.open('No es posible modificar una inscripción cancelada', 'Cerrar', {duration: 4000});
         this.router.navigate(['/inscripciones', id]);
         return;
       }
@@ -143,7 +143,7 @@ export class EnrollmentForm implements OnInit{
     this.enrollmentForm.updateValueAndValidity();
     if (this.enrollmentForm.invalid) {
       this.enrollmentForm.markAllAsTouched();
-      this.snackBar.open('Revise los datos de la inscripción', 'Cerrar', {duration: 3000});
+      this.snackBar.open('Complete o corrija los datos pendientes de la inscripción', 'Cerrar', {duration: 3000});
       return;
     }
 
@@ -160,10 +160,10 @@ export class EnrollmentForm implements OnInit{
     try {
       if (existing) {
         this.enrollmentService.update(enrollment);
-        this.snackBar.open('Inscripción actualizada', 'Cerrar', {duration: 3000});
+        this.snackBar.open('Inscripción actualizada correctamente', 'Cerrar', {duration: 3000});
       } else {
         this.enrollmentService.add(enrollment);
-        this.snackBar.open(`Inscripción ${enrollment.id} registrada`, 'Cerrar', {duration: 3000});
+        this.snackBar.open(`Inscripción ${enrollment.id} registrada correctamente`, 'Cerrar', {duration: 3000});
       }
       this.router.navigate(['/inscripciones', enrollment.id]);
     } catch (error) {

@@ -2,5 +2,5 @@
     {"id": "M", "nombre": "Masculino"},
     {"id": "F", "nombre": "Femenino"},
     {"id": "O", "nombre": "Otro"},
-    {"id": "N", "nombre": "Prefiro no indicar"}
+    {"id": "N", "nombre": "Prefiero no indicar"}
 ]

@@ -1,6 +1,6 @@
 export interface ContactNumber {
   numero: string;
-  tipo: string; // id del catálogo tipos-contacto.json (MOVIL, CASA, TRABAJO, OTRO)
+  tipo: string;
   activo: boolean;
 }
 

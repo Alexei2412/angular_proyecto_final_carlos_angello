@@ -63,7 +63,7 @@
           <mat-label>Correo electrónico</mat-label>
           <input matInput formControlName="correo" type="email" placeholder="maria@umes.edu.gt" />
           <mat-error>{{
-            errorOf(f.correo, 'Ingrese un correo válido, ej. nombre@dominio.com')
+            errorOf(f.correo, 'Ingrese un correo electrónico válido (ej. usuario@umes.edu.gt)')
           }}</mat-error>
         </mat-form-field>
 
@@ -86,7 +86,7 @@
               <mat-label>Número {{ i + 1 }}</mat-label>
               <input matInput formControlName="numero" placeholder="5555-1234" maxlength="9" />
               <mat-error>{{
-                errorOf(contacto.controls.numero, 'Debe tener 8 dígitos, ej. 5555-1234')
+                errorOf(contacto.controls.numero, 'Ingrese un número de 8 dígitos (ej. 5555-1234)')
               }}</mat-error>
             </mat-form-field>
 
@@ -121,13 +121,13 @@
           <p class="form-error">Agregue al menos un número de contacto</p>
         }
         @if (contactos.hasError('maxItems')) {
-          <p class="form-error">Máximo 5 números de contacto</p>
+          <p class="form-error">Puede registrar hasta 5 números de contacto</p>
         }
         @if (contactos.hasError('noActiveContact')) {
-          <p class="form-error">Al menos un número debe estar activo</p>
+          <p class="form-error">Mantenga al menos un número de contacto activo</p>
         }
         @if (contactos.hasError('duplicateNumber')) {
-          <p class="form-error">No repita el mismo número</p>
+          <p class="form-error">No se permiten números de contacto duplicados</p>
         }
       }
 
@@ -167,7 +167,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Semestre que cursa</mat-label>
+          <mat-label>Semestre actual</mat-label>
           <input matInput formControlName="semestre" type="number" min="1" max="10" />
           <mat-error>{{ errorOf(f.semestre) }}</mat-error>
         </mat-form-field>
@@ -178,7 +178,7 @@
   <div class="form-actions">
     <a mat-button routerLink="/estudiantes">Cancelar</a>
     <button mat-flat-button type="submit">
-      <mat-icon>save</mat-icon> {{ isEdit() ? 'Guardar cambios' : 'Registrar' }}
+      <mat-icon>save</mat-icon> {{ isEdit() ? 'Guardar cambios' : 'Registrar estudiante' }}
     </button>
   </div>
 </form>
