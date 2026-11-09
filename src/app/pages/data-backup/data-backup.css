@@ -1,0 +1,30 @@
+.backup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.card-icon {
+  margin-right: 12px;
+  color: var(--mat-sys-primary);
+}
+
+.note {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.warning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.errors-card {
+  border-color: var(--mat-sys-error);
+  color: var(--mat-sys-error);
+}

@@ -1,0 +1,79 @@
+<div class="page-header">
+  <h1>Importar / Exportar datos</h1>
+</div>
+<section class="backup-grid">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon class="card-icon">download</mat-icon>
+      <mat-card-title>Exportar datos</mat-card-title>
+      <mat-card-subtitle>Descarga un respaldo en formato JSON</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Se exportarán <strong>{{ studentService.students().length }}</strong> estudiante(s) y
+        <strong>{{ enrollmentService.enrollments().length }}</strong> inscripción(es) al archivo
+        <code>{{ fileName }}</code
+        >.
+      </p>
+      <p class="note">
+        Los catálogos (cursos, períodos, etc.) no se exportan porque están en la aplicación.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button (click)="exportData()">
+        <mat-icon>file_download</mat-icon> Exportar datos
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon class="card-icon">upload</mat-icon>
+      <mat-card-title>Importar datos</mat-card-title>
+      <mat-card-subtitle>Recupera un respaldo exportado previamente</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="warning">
+        <mat-icon>warning</mat-icon>
+        La importación reemplaza todos los estudiantes e inscripciones actuales. Primero se valida
+        el archivo; si tiene errores no se modifica nada.
+      </p>
+      @if (selectedFile()) {
+        <p>
+          Archivo seleccionado: <strong>{{ selectedFile() }}</strong>
+        </p>
+      }
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- El input real está oculto; el botón lo "clickea" -->
+      <input
+        #fileInput
+        type="file"
+        accept=".json,application/json"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+      <button mat-stroked-button (click)="fileInput.click()">
+        <mat-icon>file_upload</mat-icon> Importar datos
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</section>
+@if (importErrors().length > 0) {
+  <mat-card appearance="outlined" class="errors-card">
+    <mat-card-header>
+      <mat-card-title
+        >El archivo no se pudo importar ({{ importErrors().length }} error(es))</mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        @for (error of importErrors().slice(0, 20); track $index) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+      @if (importErrors().length > 20) {
+        <p>... y {{ importErrors().length - 20 }} error(es) más.</p>
+      }
+    </mat-card-content>
+  </mat-card>
+}
